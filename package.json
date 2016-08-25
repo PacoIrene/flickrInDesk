@@ -1,0 +1,23 @@
+{
+  "name": "flickrInDesk",
+  "version": "1.0.0",
+  "description": "a flickr app built by electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PacoIrene/flickrInDesk.git"
+  },
+  "keywords": [
+    "Electron",
+    "flickr",
+    "app"
+  ],
+  "author": "PacoIrene",
+  "homepage": "https://github.com/PacoIrene/flickrInDesk",
+  "devDependencies": {
+    "electron-prebuilt": "^1.3.4"
+  }
+}
