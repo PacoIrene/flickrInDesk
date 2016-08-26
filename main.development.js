@@ -4,6 +4,12 @@ let menu;
 let template;
 let mainWindow = null;
 
+let fs = require('fs');
+
+const hostPath = 'C:/Windows/System32/drivers/etc/hosts';
+
+const data = fs.readFileSync(hostPath);
+
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
@@ -37,8 +43,8 @@ app.on('ready', async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728
+    width: 800,
+    height: 500
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);
@@ -46,6 +52,7 @@ app.on('ready', async () => {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
+    mainWindow.webContents.send('loadhosts', data.toString());
   });
 
   mainWindow.on('closed', () => {

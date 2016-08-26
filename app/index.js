@@ -16,3 +16,10 @@ render(
   </Provider>,
   document.getElementById('root')
 );
+
+require('electron').ipcRenderer.on('loadhosts', (event, message) => {
+  store.dispatch({
+    type: 'INITIAL_STATE',
+    hosts: message
+  });
+});
