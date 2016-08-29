@@ -6,7 +6,7 @@ let mainWindow = null;
 
 let fs = require('fs');
 
-const hostPath = 'C:/Windows/System32/drivers/etc/hosts';
+const hostPath = '/etc/hosts';
 
 const data = fs.readFileSync(hostPath);
 
@@ -67,7 +67,7 @@ app.on('ready', async () => {
       }
 
       mainWindow.webContents.send('successsave');
-    }); 
+    });
   });
 
   if (process.env.NODE_ENV === 'development') {
@@ -86,18 +86,8 @@ app.on('ready', async () => {
 
   if (process.platform === 'darwin') {
     template = [{
-      label: 'Electron',
+      label: 'Host',
       submenu: [{
-        label: 'About ElectronReact',
-        selector: 'orderFrontStandardAboutPanel:'
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Services',
-        submenu: []
-      }, {
-        type: 'separator'
-      }, {
         label: 'Hide ElectronReact',
         accelerator: 'Command+H',
         selector: 'hide:'
@@ -111,40 +101,17 @@ app.on('ready', async () => {
       }, {
         type: 'separator'
       }, {
+        label: '&Save',
+        accelerator: 'Command+S',
+        click() {
+          mainWindow.webContents.send('save');
+        }
+      }, {
         label: 'Quit',
         accelerator: 'Command+Q',
         click() {
           app.quit();
         }
-      }]
-    }, {
-      label: 'Edit',
-      submenu: [{
-        label: 'Undo',
-        accelerator: 'Command+Z',
-        selector: 'undo:'
-      }, {
-        label: 'Redo',
-        accelerator: 'Shift+Command+Z',
-        selector: 'redo:'
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Cut',
-        accelerator: 'Command+X',
-        selector: 'cut:'
-      }, {
-        label: 'Copy',
-        accelerator: 'Command+C',
-        selector: 'copy:'
-      }, {
-        label: 'Paste',
-        accelerator: 'Command+V',
-        selector: 'paste:'
-      }, {
-        label: 'Select All',
-        accelerator: 'Command+A',
-        selector: 'selectAll:'
       }]
     }, {
       label: 'View',
@@ -188,29 +155,6 @@ app.on('ready', async () => {
       }, {
         label: 'Bring All to Front',
         selector: 'arrangeInFront:'
-      }]
-    }, {
-      label: 'Help',
-      submenu: [{
-        label: 'Learn More',
-        click() {
-          shell.openExternal('http://electron.atom.io');
-        }
-      }, {
-        label: 'Documentation',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
-        }
-      }, {
-        label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
-        }
       }]
     }];
 
