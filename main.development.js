@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, shell } from 'electron';
+import { app, BrowserWindow, Menu, shell, ipcMain } from 'electron';
 
 let menu;
 let template;
@@ -44,7 +44,8 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 800,
-    height: 500
+    height: 500,
+    icon: __dirname + '/icon.ico'
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);
@@ -57,6 +58,16 @@ app.on('ready', async () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+  });
+
+  ipcMain.on('hostready', (event, arg) => {
+    fs.writeFile(hostPath, arg, err => {
+      if(err) {
+        return console.log(err);
+      }
+
+      mainWindow.webContents.send('successsave');
+    }); 
   });
 
   if (process.env.NODE_ENV === 'development') {
@@ -212,6 +223,12 @@ app.on('ready', async () => {
         label: '&Open',
         accelerator: 'Ctrl+O'
       }, {
+        label: '&Save',
+        accelerator: 'Ctrl+S',
+        click() {
+          mainWindow.webContents.send('save');
+        }
+      }, {
         label: '&Close',
         accelerator: 'Ctrl+W',
         click() {
@@ -243,29 +260,6 @@ app.on('ready', async () => {
         accelerator: 'F11',
         click() {
           mainWindow.setFullScreen(!mainWindow.isFullScreen());
-        }
-      }]
-    }, {
-      label: 'Help',
-      submenu: [{
-        label: 'Learn More',
-        click() {
-          shell.openExternal('http://electron.atom.io');
-        }
-      }, {
-        label: 'Documentation',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/tree/master/docs#readme');
-        }
-      }, {
-        label: 'Community Discussions',
-        click() {
-          shell.openExternal('https://discuss.atom.io/c/electron');
-        }
-      }, {
-        label: 'Search Issues',
-        click() {
-          shell.openExternal('https://github.com/atom/electron/issues');
         }
       }]
     }];

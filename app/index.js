@@ -5,10 +5,24 @@ import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 import routes from './routes';
 import configureStore from './store/configureStore';
+import './reset.css';
 import './app.global.css';
+import {ipcRenderer} from 'electron';
+import {SUCCESS_SAVE} from './actions/host';
 
 const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
+
+
+ipcRenderer.on('save', (event, message) => {
+    ipcRenderer.send('hostready', store.getState().host.host);
+});
+
+ipcRenderer.on('successsave', (event, message) => {
+    store.dispatch({
+        type: SUCCESS_SAVE
+    })
+});
 
 render(
   <Provider store={store}>
@@ -16,10 +30,3 @@ render(
   </Provider>,
   document.getElementById('root')
 );
-
-require('electron').ipcRenderer.on('loadhosts', (event, message) => {
-  store.dispatch({
-    type: 'INITIAL_STATE',
-    hosts: message
-  });
-});
