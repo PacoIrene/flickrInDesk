@@ -45,7 +45,7 @@ app.on('ready', async () => {
     show: false,
     width: 800,
     height: 500,
-    icon: __dirname + '/icon.ico'
+    icon: __dirname + '/app.ico'
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`);
